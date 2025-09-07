@@ -1,0 +1,6 @@
+@AFPrint.api_HostAddress = http://localhost:5094
+
+GET {{AFPrint.api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
