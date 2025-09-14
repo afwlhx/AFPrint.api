@@ -1,6 +1,5 @@
 using AFPrint.api.Context;
-using AFPrint.api.Models;
-using AFPrint.api.Models.Get;
+using AFPrint.api.Models.Entity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AFPrint.api.Controllers;
@@ -22,11 +21,25 @@ public class UploadController : ControllerBase
     ///     上传单个文件
     /// </summary>
     [HttpPost]
-    [Consumes("multipart/form-data")] // ✅ swagger 识别文件上传
-    public async Task<IActionResult> Upload([FromForm] FileUploadDto dto)
+    public async Task<IActionResult> Upload(IFormFile file, string visitorUuid)
     {
+        // 根据UUID搜索最后一个的时间
+        var latestUploadTime = _context.DocumentInfos
+            .Where(f => f.UploadVisitorUuid == visitorUuid)                // 根据 uuid 查询
+            .OrderByDescending(f => f.UploadTime)    // 按上传时间倒序
+            .Select(f => f.UploadTime)               // 只取上传时间
+            .FirstOrDefault();                       // 最新一条
+        
+        // 检测时间是否间隔30秒
+        TimeSpan diff = DateTime.Now - latestUploadTime;
+        if (diff.TotalSeconds < 30)
+        {
+            return BadRequest("时间请间隔30秒");
+        }
+
+
         //检测是否有文件
-        if (dto.File == null || dto.File.Length == 0)
+        if (file == null || file.Length == 0)
             return BadRequest("未选择文件");
 
         //获取路径
@@ -37,18 +50,19 @@ public class UploadController : ControllerBase
             Directory.CreateDirectory(uploadPath);
 
         //文件名
-        var fileName = $"{DateTime.Now:yyyyMMddHHmmss}_{dto.File.FileName}";
+        var fileName = $"{DateTime.Now:yyyyMMddHHmmss}_{file.FileName}";
         //合并目录和文件名
         var filePath = Path.Combine(uploadPath, fileName);
 
         //写入
         using (var stream = new FileStream(filePath, FileMode.Create))
         {
-            await dto.File.CopyToAsync(stream);
+            await file.CopyToAsync(stream);
         }
 
         var documentInfo = new DocumentInfo
         {
+            UploadVisitorUuid = visitorUuid,
             FileName = fileName,
             PrintNumber = 1,
             StorgeLocation = uploadPath,
@@ -75,4 +89,18 @@ public class UploadController : ControllerBase
             filePath = $"/uploads/{fileName}"
         });
     }
+
+    // 查询是否能上传 ( 时间间隔是否满足 )
+//     [HttpPost]
+//     public IActionResult IsCanUpload(string visitorUUID)
+//     {
+//         // 根据UUID搜索时间
+//         var latestUploadTime = _context.DocumentInfos
+//             .Where(f => f.UploadVisitorUuid == visitorUUID)                // 根据 uuid 查询
+//             .OrderByDescending(f => f.UploadTime)    // 按上传时间倒序
+//             .Select(f => f.UploadTime)               // 只取上传时间
+//             .FirstOrDefault();                       // 最新一条
+//         
+//         return Ok(latestUploadTime);
+//     }
 }

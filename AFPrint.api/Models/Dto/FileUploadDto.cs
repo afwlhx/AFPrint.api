@@ -1,4 +1,4 @@
-namespace AFPrint.api.Models.Get;
+namespace AFPrint.api.Models.Dto;
 
 public class FileUploadDto
 {

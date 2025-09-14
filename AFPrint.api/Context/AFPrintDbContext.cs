@@ -1,5 +1,8 @@
-﻿using AFPrint.api.Models;
+﻿using System;
+using System.Collections.Generic;
+using AFPrint.api.Models.Entity;
 using Microsoft.EntityFrameworkCore;
+using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
 
 namespace AFPrint.api.Context;
 
@@ -19,9 +22,8 @@ public partial class AFPrintDbContext : DbContext
     public virtual DbSet<OrderInfo> OrderInfos { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https: //go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySql("server=8.156.71.102;port=3306;database=afprint;user=root;password=liujiaaoNB666",
-            ServerVersion.Parse("8.4.6-mysql"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseMySql("server=8.156.71.102;port=3306;database=afprint;user=afprint;password=TrHwJKn8QdKj2nEX", Microsoft.EntityFrameworkCore.ServerVersion.Parse("8.4.6-mysql"));
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -73,6 +75,10 @@ public partial class AFPrintDbContext : DbContext
                 .HasComment("上传时间")
                 .HasColumnType("timestamp")
                 .HasColumnName("upload_time");
+            entity.Property(e => e.UploadVisitorUuid)
+                .HasMaxLength(64)
+                .HasComment("文件上传者UUID")
+                .HasColumnName("upload_visitor_uuid");
         });
 
         modelBuilder.Entity<OrderInfo>(entity =>
@@ -91,6 +97,9 @@ public partial class AFPrintDbContext : DbContext
                 .HasMaxLength(256)
                 .HasComment("文件名")
                 .HasColumnName("file_name");
+            entity.Property(e => e.IsDoublePrint)
+                .HasComment("是否双面打印")
+                .HasColumnName("is_double_print");
             entity.Property(e => e.IsPay)
                 .HasComment("是否支付")
                 .HasColumnName("is_pay");
@@ -111,6 +120,10 @@ public partial class AFPrintDbContext : DbContext
                 .HasMaxLength(16)
                 .HasComment("下单电话")
                 .HasColumnName("phone_number");
+            entity.Property(e => e.UploadVisitorUuid)
+                .HasMaxLength(64)
+                .HasComment("上传者UUID")
+                .HasColumnName("upload_visitor_uuid");
         });
 
         OnModelCreatingPartial(modelBuilder);

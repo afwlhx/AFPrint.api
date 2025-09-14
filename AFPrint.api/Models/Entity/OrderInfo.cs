@@ -1,44 +1,57 @@
-﻿namespace AFPrint.api.Models;
+﻿using System;
+using System.Collections.Generic;
 
-public class OrderInfo
+namespace AFPrint.api.Models.Entity;
+
+public partial class OrderInfo
 {
     /// <summary>
-    ///     id
+    /// id
     /// </summary>
     public int Id { get; set; }
 
     /// <summary>
-    ///     订单id
+    /// 上传者UUID
+    /// </summary>
+    public string UploadVisitorUuid { get; set; } = null!;
+
+    /// <summary>
+    /// 订单id
     /// </summary>
     public string OrderId { get; set; } = null!;
 
     /// <summary>
-    ///     订单状态
+    /// 订单状态
     /// </summary>
     public string OrderStatus { get; set; } = null!;
 
     /// <summary>
-    ///     下单电话
+    /// 下单电话
     /// </summary>
     public string PhoneNumber { get; set; } = null!;
 
     /// <summary>
-    ///     是否支付
+    /// 是否双面打印
+    /// </summary>
+    public bool IsDoublePrint { get; set; }
+
+    /// <summary>
+    /// 是否支付
     /// </summary>
     public bool IsPay { get; set; }
 
     /// <summary>
-    ///     总费用
+    /// 总费用
     /// </summary>
     public double Cost { get; set; }
 
     /// <summary>
-    ///     下单时间
+    /// 下单时间
     /// </summary>
     public DateTime OrderTime { get; set; }
 
     /// <summary>
-    ///     文件名
+    /// 文件名
     /// </summary>
     public string FileName { get; set; } = null!;
 }
