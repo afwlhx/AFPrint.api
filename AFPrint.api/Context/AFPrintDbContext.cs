@@ -90,6 +90,10 @@ public partial class AFPrintDbContext : DbContext
             entity.Property(e => e.Id)
                 .HasComment("id")
                 .HasColumnName("id");
+            entity.Property(e => e.Address)
+                .HasMaxLength(64)
+                .HasComment("配送地址")
+                .HasColumnName("address");
             entity.Property(e => e.Cost)
                 .HasComment("总费用")
                 .HasColumnName("cost");

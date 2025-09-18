@@ -1,5 +1,4 @@
 using AFPrint.api.Context;
-using AFPrint.api.Models;
 using AFPrint.api.Models.Dto;
 using AFPrint.api.Models.Entity;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +29,7 @@ public class OrderController : ControllerBase
         orderInfo.IsPay = false;
         orderInfo.Cost = orderInfoDto.Cost;
         orderInfo.OrderTime = DateTime.Now;
+        orderInfo.Address = orderInfoDto.Address;
         orderInfo.FileName = orderInfoDto.FileName;
 
 

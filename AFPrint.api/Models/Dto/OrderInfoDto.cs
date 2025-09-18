@@ -16,6 +16,11 @@ public class OrderInfoDto
     ///     总费用
     /// </summary>
     public double Cost { get; set; }
+    
+    /// <summary>
+    /// 配送地址
+    /// </summary>
+    public string Address { get; set; } = null!;
 
     /// <summary>
     ///     文件名

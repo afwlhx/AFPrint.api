@@ -51,6 +51,11 @@ public partial class OrderInfo
     public DateTime OrderTime { get; set; }
 
     /// <summary>
+    /// 配送地址
+    /// </summary>
+    public string Address { get; set; } = null!;
+
+    /// <summary>
     /// 文件名
     /// </summary>
     public string FileName { get; set; } = null!;
