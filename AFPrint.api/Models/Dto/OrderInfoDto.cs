@@ -11,6 +11,11 @@ public class OrderInfoDto
     /// 是否双面打印
     /// </summary>
     public bool IsDoublePrint { get; set; }
+    
+    /// <summary>
+    /// 是否彩印
+    /// </summary>
+    public bool IsColorPrint { get; set; }
 
     /// <summary>
     ///     总费用

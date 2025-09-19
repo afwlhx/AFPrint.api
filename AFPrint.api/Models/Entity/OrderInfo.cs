@@ -36,6 +36,11 @@ public partial class OrderInfo
     public bool IsDoublePrint { get; set; }
 
     /// <summary>
+    /// 是否彩印
+    /// </summary>
+    public bool IsColorPrint { get; set; }
+
+    /// <summary>
     /// 是否支付
     /// </summary>
     public bool IsPay { get; set; }

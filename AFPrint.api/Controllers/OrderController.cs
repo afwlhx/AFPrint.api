@@ -26,6 +26,7 @@ public class OrderController : ControllerBase
         orderInfo.OrderStatus = "waiting";
         orderInfo.PhoneNumber = orderInfoDto.PhoneNumber;
         orderInfo.IsDoublePrint = orderInfoDto.IsDoublePrint;
+        orderInfo.IsColorPrint = orderInfoDto.IsColorPrint;
         orderInfo.IsPay = false;
         orderInfo.Cost = orderInfoDto.Cost;
         orderInfo.OrderTime = DateTime.Now;

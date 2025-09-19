@@ -101,6 +101,9 @@ public partial class AFPrintDbContext : DbContext
                 .HasMaxLength(256)
                 .HasComment("文件名")
                 .HasColumnName("file_name");
+            entity.Property(e => e.IsColorPrint)
+                .HasComment("是否彩印")
+                .HasColumnName("is_color_print");
             entity.Property(e => e.IsDoublePrint)
                 .HasComment("是否双面打印")
                 .HasColumnName("is_double_print");
