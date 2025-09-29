@@ -127,6 +127,9 @@ public partial class AFPrintDbContext : DbContext
                 .HasMaxLength(16)
                 .HasComment("下单电话")
                 .HasColumnName("phone_number");
+            entity.Property(e => e.PrintNumber)
+                .HasComment("打印数量")
+                .HasColumnName("print_number");
             entity.Property(e => e.UploadVisitorUuid)
                 .HasMaxLength(64)
                 .HasComment("上传者UUID")

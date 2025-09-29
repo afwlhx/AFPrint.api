@@ -64,4 +64,9 @@ public partial class OrderInfo
     /// 文件名
     /// </summary>
     public string FileName { get; set; } = null!;
+
+    /// <summary>
+    /// 打印数量
+    /// </summary>
+    public int PrintNumber { get; set; }
 }

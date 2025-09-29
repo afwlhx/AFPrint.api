@@ -32,7 +32,7 @@ public class OrderController : ControllerBase
         orderInfo.OrderTime = DateTime.Now;
         orderInfo.Address = orderInfoDto.Address;
         orderInfo.FileName = orderInfoDto.FileName;
-
+        orderInfo.PrintNumber = orderInfoDto.PrintNumber;
 
         _context.OrderInfos.Add(orderInfo);
 
