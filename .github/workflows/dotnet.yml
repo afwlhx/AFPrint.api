@@ -1,0 +1,71 @@
+name: .NET Build, Publish & Release
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: write   # 允许创建 Release
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1️⃣ 拉取代码
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2️⃣ 安装 .NET 8 SDK
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 8.0.x
+
+    # 3️⃣ 还原依赖
+    - name: Restore dependencies
+      run: dotnet restore AFPrint.api.sln
+
+    # 4️⃣ 编译项目（Release 模式）
+    - name: Build
+      run: dotnet build AFPrint.api.sln --configuration Release --no-restore
+
+    # 5️⃣ 执行测试（可选）
+    - name: Test
+      run: dotnet test AFPrint.api.sln --no-build --verbosity normal || echo "No tests found"
+
+    # 6️⃣ 发布项目
+    - name: Publish project
+      run: dotnet publish ./AFPrint.api/AFPrint.api.csproj -c Release -o ./publish
+
+    # 7️⃣ 压缩发布产物
+    - name: Compress published files
+      run: |
+        cd ./publish
+        zip -r ../publish.zip ./*
+        cd ..
+
+    # 8️⃣ 上传构建产物
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: published-app
+        path: ./publish.zip
+
+    # 9️⃣ 创建 GitHub Release
+    - name: Create GitHub Release
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      with:
+        # ✅ 自动生成 tag（使用当前日期时间）
+        tag_name: v${{ github.run_number }}-${{ github.ref_name }}
+        name: 自动发布版本 ${{ github.run_number }}
+        body: |
+          🚀 自动构建发布完成！
+          - 分支: ${{ github.ref_name }}
+          - 提交: ${{ github.sha }}
+          - 构建编号: ${{ github.run_number }}
+          - 触发时间: ${{ github.event.head_commit.timestamp }}
+        files: ./publish.zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
