@@ -26,8 +26,9 @@ var jwtSection = builder.Configuration.GetSection("Jwt");
 var issuer = jwtSection["Issuer"]; // 签发着
 var audience = jwtSection["Audience"]; // 接收方
 var key = jwtSection["Key"]; // 密钥
-var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)); // 生成对称加密的签名密钥 这里使用 SymmetricSecurityKey（对称加密密钥），意思是：
-                                                                         // 签发和验证 JWT 都用同一把 key（不是公钥私钥的非对称方式）。
+var signingKey =
+    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key!)); // 生成对称加密的签名密钥 这里使用 SymmetricSecurityKey（对称加密密钥），意思是：
+// 签发和验证 JWT 都用同一把 key（不是公钥私钥的非对称方式）。
 // 注册 JWT
 builder.Services
     .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,7 +47,7 @@ builder.Services
     });
 
 // 配置 MySQL 数据库上下文
-builder.Services.AddDbContext<AFPrintDbContext>(options =>
+builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
         ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
 

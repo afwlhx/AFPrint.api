@@ -69,4 +69,9 @@ public partial class OrderInfo
     /// 打印数量
     /// </summary>
     public int PrintNumber { get; set; }
+
+    /// <summary>
+    /// 用户id
+    /// </summary>
+    public int UserId { get; set; }
 }

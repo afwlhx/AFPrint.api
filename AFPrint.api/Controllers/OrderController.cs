@@ -1,6 +1,8 @@
+using System.Security.Claims;
 using AFPrint.api.Context;
 using AFPrint.api.Models.Dto;
 using AFPrint.api.Models.Entity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AFPrint.api.Controllers;
@@ -9,18 +11,19 @@ namespace AFPrint.api.Controllers;
 [ApiController]
 public class OrderController : ControllerBase
 {
-    private readonly AFPrintDbContext _context;
+    private readonly MyDbContext _context;
 
-    public OrderController(AFPrintDbContext context)
+    public OrderController(MyDbContext context)
     {
         _context = context;
     }
 
     [HttpPost]
+    [Authorize]
     public IActionResult Order(OrderInfoDto orderInfoDto)
     {
         var orderInfo = new OrderInfo();
-
+        
         orderInfo.OrderId = $"{DateTime.Now:yyyyMMddHHmmss}_{orderInfoDto.PhoneNumber}";
         orderInfo.UploadVisitorUuid = "test";
         orderInfo.OrderStatus = "waiting";
@@ -33,6 +36,7 @@ public class OrderController : ControllerBase
         orderInfo.Address = orderInfoDto.Address;
         orderInfo.FileName = orderInfoDto.FileName;
         orderInfo.PrintNumber = orderInfoDto.PrintNumber;
+        orderInfo.UserId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier)); //通过JWT获得ID
 
         _context.OrderInfos.Add(orderInfo);
 
@@ -44,7 +48,7 @@ public class OrderController : ControllerBase
     [HttpPost]
     public IActionResult OrderSearch(string phoneNumber)
 
-{
+    {
         // 使用LINQ语法查询关键字phoneNumber为某值下的所有数据
         var orders = _context.OrderInfos
             .Where(o => o.PhoneNumber == phoneNumber)

@@ -8,10 +8,10 @@ namespace AFPrint.api.Controllers;
 [ApiController]
 public class UploadController : ControllerBase
 {
-    private readonly AFPrintDbContext _context;
+    private readonly MyDbContext _context;
     private readonly IWebHostEnvironment _env;
 
-    public UploadController(IWebHostEnvironment env, AFPrintDbContext context)
+    public UploadController(IWebHostEnvironment env, MyDbContext context)
     {
         _env = env;
         _context = context;
@@ -25,17 +25,14 @@ public class UploadController : ControllerBase
     {
         // 根据UUID搜索最后一个的时间
         var latestUploadTime = _context.DocumentInfos
-            .Where(f => f.UploadVisitorUuid == visitorUuid)                // 根据 uuid 查询
-            .OrderByDescending(f => f.UploadTime)    // 按上传时间倒序
-            .Select(f => f.UploadTime)               // 只取上传时间
-            .FirstOrDefault();                       // 最新一条
-        
+            .Where(f => f.UploadVisitorUuid == visitorUuid) // 根据 uuid 查询
+            .OrderByDescending(f => f.UploadTime) // 按上传时间倒序
+            .Select(f => f.UploadTime) // 只取上传时间
+            .FirstOrDefault(); // 最新一条
+
         // 检测时间是否间隔30秒
-        TimeSpan diff = DateTime.Now - latestUploadTime;
-        if (diff.TotalSeconds < 30)
-        {
-            return BadRequest("时间请间隔30秒");
-        }
+        var diff = DateTime.Now - latestUploadTime;
+        if (diff.TotalSeconds < 30) return BadRequest("时间请间隔30秒");
 
 
         //检测是否有文件
