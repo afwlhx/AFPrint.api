@@ -1,4 +1,5 @@
 using AFPrint.api.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AFPrint.api.Controllers;
@@ -15,9 +16,10 @@ public class AdminController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult SearchAll(string key)
+    [Authorize(Roles = "Admin")]
+    public IActionResult SearchAll()
     {
-        if (key != "248655") return BadRequest("key不正确");
+        // if (key != "248655") return BadRequest("key不正确");
 
         var list = _context.OrderInfos.ToList();
 

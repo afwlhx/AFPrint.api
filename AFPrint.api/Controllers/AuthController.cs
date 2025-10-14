@@ -35,11 +35,11 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register(RegisterDto dto)
     {
         if (string.IsNullOrWhiteSpace(dto.Username) || string.IsNullOrWhiteSpace(dto.Password))
-            return BadRequest("用户名和密码不能为空。");
+            return BadRequest( new { message = "用户名和密码不能为空" });
 
         var exist = _context.Users.FirstOrDefault(x => x.Username == dto.Username);
         if (exist != null)
-            return Conflict("该用户名已被注册。");
+            return Conflict( new { message ="该用户名已被注册" });
 
         var user = new User
         {
@@ -63,11 +63,11 @@ public class AuthController : ControllerBase
         if (user == null) return Unauthorized();
     
         if (!BCrypt.Net.BCrypt.Verify(dto.Password, user.PasswordHash))
-            return Unauthorized();
+            return Unauthorized(new { message = "密码错误" });
     
         // 生成 Token
         var token = GenerateJwtToken(user);
-        return Ok(new { accessToken = token, tokenType = "Bearer" });
+        return Ok(new { message = "登录成功", accessToken = token, tokenType = "Bearer" });
     }
     
     // ✅ 当前用户信息
