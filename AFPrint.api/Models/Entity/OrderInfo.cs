@@ -11,11 +11,6 @@ public partial class OrderInfo
     public int Id { get; set; }
 
     /// <summary>
-    /// 上传者UUID
-    /// </summary>
-    public string UploadVisitorUuid { get; set; } = null!;
-
-    /// <summary>
     /// 订单id
     /// </summary>
     public string OrderId { get; set; } = null!;
@@ -24,11 +19,6 @@ public partial class OrderInfo
     /// 订单状态
     /// </summary>
     public string OrderStatus { get; set; } = null!;
-
-    /// <summary>
-    /// 下单电话
-    /// </summary>
-    public string PhoneNumber { get; set; } = null!;
 
     /// <summary>
     /// 是否双面打印
@@ -68,7 +58,7 @@ public partial class OrderInfo
     /// <summary>
     /// 打印数量
     /// </summary>
-    public int PrintNumber { get; set; }
+    public int? PrintNumber { get; set; }
 
     /// <summary>
     /// 用户id

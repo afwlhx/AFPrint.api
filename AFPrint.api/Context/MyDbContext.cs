@@ -125,17 +125,9 @@ public partial class MyDbContext : DbContext
                 .HasComment("下单时间")
                 .HasColumnType("timestamp")
                 .HasColumnName("order_time");
-            entity.Property(e => e.PhoneNumber)
-                .HasMaxLength(16)
-                .HasComment("下单电话")
-                .HasColumnName("phone_number");
             entity.Property(e => e.PrintNumber)
                 .HasComment("打印数量")
                 .HasColumnName("print_number");
-            entity.Property(e => e.UploadVisitorUuid)
-                .HasMaxLength(64)
-                .HasComment("上传者UUID")
-                .HasColumnName("upload_visitor_uuid");
             entity.Property(e => e.UserId)
                 .HasComment("用户id")
                 .HasColumnName("user_id");

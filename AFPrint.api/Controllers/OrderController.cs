@@ -18,16 +18,15 @@ public class OrderController : ControllerBase
         _context = context;
     }
 
+    // 下单
     [HttpPost]
     [Authorize]
     public IActionResult Order(OrderInfoDto orderInfoDto)
     {
         var orderInfo = new OrderInfo();
         
-        orderInfo.OrderId = $"{DateTime.Now:yyyyMMddHHmmss}_{orderInfoDto.PhoneNumber}";
-        orderInfo.UploadVisitorUuid = "test";
+        orderInfo.OrderId = $"{DateTime.Now:yyyyMMddHHmmss}-{User.FindFirstValue(ClaimTypes.NameIdentifier)}";
         orderInfo.OrderStatus = "waiting";
-        orderInfo.PhoneNumber = orderInfoDto.PhoneNumber;
         orderInfo.IsDoublePrint = orderInfoDto.IsDoublePrint;
         orderInfo.IsColorPrint = orderInfoDto.IsColorPrint;
         orderInfo.IsPay = false;
@@ -43,17 +42,5 @@ public class OrderController : ControllerBase
         _context.SaveChanges();
 
         return Ok();
-    }
-
-    [HttpPost]
-    public IActionResult OrderSearch(string phoneNumber)
-
-    {
-        // 使用LINQ语法查询关键字phoneNumber为某值下的所有数据
-        var orders = _context.OrderInfos
-            .Where(o => o.PhoneNumber == phoneNumber)
-            .ToList();
-
-        return Ok(orders);
     }
 }
