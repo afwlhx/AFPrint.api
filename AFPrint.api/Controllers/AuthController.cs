@@ -79,7 +79,6 @@ public class AuthController : ControllerBase
         var name = User.Identity?.Name;
         var role = User.FindFirstValue(ClaimTypes.Role);
         
-        // 使用LINQ语法查询关键字phoneNumber为某值下的所有数据
         var orders = _context.OrderInfos
             .Where(o => o.UserId == id)
             .ToList();

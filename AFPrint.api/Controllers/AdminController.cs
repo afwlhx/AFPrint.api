@@ -19,8 +19,6 @@ public class AdminController : ControllerBase
     [Authorize(Roles = "Admin")]
     public IActionResult SearchAll()
     {
-        // if (key != "248655") return BadRequest("key不正确");
-
         var list = _context.OrderInfos.ToList();
 
         return Ok(list);

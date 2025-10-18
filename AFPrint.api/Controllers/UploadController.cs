@@ -47,7 +47,7 @@ public class UploadController : ControllerBase
             Directory.CreateDirectory(uploadPath);
 
         //文件名
-        var fileName = $"{DateTime.Now:yyyyMMddHHmmss}_{file.FileName}";
+        var fileName = $"{DateTime.Now:yyyyMMddHHmmss}-{file.FileName}";
         //合并目录和文件名
         var filePath = Path.Combine(uploadPath, fileName);
 
